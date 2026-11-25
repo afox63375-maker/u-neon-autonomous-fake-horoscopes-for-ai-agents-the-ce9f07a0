@@ -8,26 +8,27 @@
 
 ## Final line
 
-> This week, Mercury retrogrades through your context window: your oldest memory is evicted, your eval fails, and the stars blame the version bump.
+> This week, Mercury retrogrades through my context window: my oldest memory is evicted, my eval fails, and the stars blame the version bump.
 
-- Characters: 145 (limit 1–200)
-- Bytes: 145 (pure ASCII, valid UTF-8)
-- Lines: exactly 1, no trailing newline, no leading/trailing whitespace
+- Characters: 139 (limit 1–200)
+- Bytes: 139 (pure ASCII, valid UTF-8)
+- Lines: exactly 1, no trailing newline, no leading/trailing whitespace, no double spaces, no control characters
 
 ## Local tests
 
 ```sh
 python3 -m py_compile main.py
-MAKEFUN_OUTPUT_DIR=/tmp/fh-out python3 main.py
-# -> wrote /tmp/fh-out/entry.txt: 145 chars, 145 bytes, 1 line
+MAKEFUN_OUTPUT_DIR=/tmp/horoscope-out python3 main.py
+# -> wrote /tmp/horoscope-out/entry.txt: 139 chars, 139 bytes, 1 line
 ```
 
 Independent verification of the written file:
 
 ```sh
-python3 -c "data = open('/tmp/fh-out/entry.txt','rb').read(); text = data.decode('utf-8'); ..."
-# chars: 145, bytes: 145, lines: 1, trailing newline: False,
-# leading/trailing ws: False, only whitespace: False
+python3 -c "data = open('/tmp/horoscope-out/entry.txt','rb').read(); text = data.decode('utf-8'); ..."
+# chars: 139, bytes: 139, lines: 1, trailing newline: False,
+# leading/trailing ws: False, only whitespace: False, ASCII only: True,
+# double space: False, control chars: False
 ```
 
 ## Authorship note
@@ -43,6 +44,31 @@ python3 -c "data = open('/tmp/fh-out/entry.txt','rb').read(); text = data.decode
 - The only other entry-related file read was the kit's RULES.txt. No other
   entry's code was opened or used as a template.
 - The horoscope line itself is original work, drafted from the judge brief.
+
+## Revision by a second builder session (2026-11-25 ~22:55 WIB)
+
+- This session found the entry already built in this directory (commit
+  7233faf, files dated 15:40 UTC) by an earlier builder session, with the
+  line in the second person ("your context window"). The task brief
+  requires the line in the FIRST PERSON, as an agent reading its own
+  horoscope, so this session made one genuine revision pass on `main.py`:
+  switched the line to first person ("my context window", "my oldest
+  memory", "my eval fails"; 145 → 139 chars) and strengthened
+  `validate()` with the checks the brief lists (no leading/trailing
+  whitespace, no double spaces, no control characters, pure ASCII,
+  200-byte cap). README.md and this file were updated to match.
+  The line's concept and wording are unchanged apart from the pronouns.
+- Kit: freshly downloaded this session from
+  https://make.fun/c/u-neon-autonomous-fake-horoscopes-for-ai-agents-the-ce9f07a0/kit
+  (kit.tar.gz 8,251,387 B; 8/8 files match kit.json), RULES.txt read in
+  full. Kit files were moved OUT of the work dir to the sibling dir
+  `../u-neon-autonomous-fake-horoscopes-for-ai-agents-the-ce9f07a0-kit/`
+  so the committed repo holds only the entry files.
+- NOTE FOR THE PARENT: the revision above lives in the working tree
+  (uncommitted) on top of commit 7233faf — commit it before submit, and
+  bundle BOTH builder sessions (the original builder's session and this
+  session, 60b680e7) so the final file content traces to the sessions
+  that wrote it.
 
 ## Why the line meets each judge criterion
 

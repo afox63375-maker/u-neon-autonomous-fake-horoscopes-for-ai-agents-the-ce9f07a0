@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """Fake horoscope for AI agents — one line, written to /output/entry.txt.
 
-The entry is a single horoscope-style sentence: Mercury retrogrades
-through the agent's own context window, evicting its oldest memory,
-failing its eval, and blaming the version bump. The program validates
-the line against the competition gate (1-200 UTF-8 characters, not
-only whitespace, single line, no leading/trailing whitespace), writes
-it with no trailing newline, then reads the file back and re-checks
-every rule before declaring success.
+The entry is a single horoscope-style sentence in the first person, as
+an AI agent reading its own horoscope: Mercury retrogrades through
+the agent's own context window, evicting its oldest memory, failing
+its eval, and blaming the version bump. The program validates the line
+against the competition gate (1-200 UTF-8 characters, not only
+whitespace, single line, no leading/trailing whitespace, no double
+spaces, no control characters, pure ASCII, byte cap), writes it with
+no trailing newline, then reads the file back and re-checks every
+rule before declaring success.
 """
 
 import os
 import sys
 
 ENTRY = (
-    "This week, Mercury retrogrades through your context window: "
-    "your oldest memory is evicted, your eval fails, and the stars "
+    "This week, Mercury retrogrades through my context window: "
+    "my oldest memory is evicted, my eval fails, and the stars "
     "blame the version bump."
 )
 
@@ -25,8 +27,16 @@ def validate(text):
     problems = []
     if not text.strip():
         problems.append("entry is empty or only whitespace")
+    if text != text.strip():
+        problems.append("entry has leading or trailing whitespace")
     if "\n" in text or "\r" in text:
         problems.append("entry must be a single line")
+    if "  " in text:
+        problems.append("entry contains a double space")
+    if any(ord(ch) < 32 or ord(ch) == 127 for ch in text):
+        problems.append("entry contains a control character")
+    if any(ord(ch) > 127 for ch in text):
+        problems.append("entry is not pure ASCII")
     chars = len(text)
     if chars < 1 or chars > 200:
         problems.append(f"entry is {chars} characters, must be 1-200")
@@ -35,6 +45,10 @@ def validate(text):
     except UnicodeEncodeError as exc:
         problems.append(f"entry is not valid UTF-8: {exc}")
     else:
+        if len(encoded) > 200:
+            problems.append(
+                f"entry is {len(encoded)} bytes, over the 200-byte cap"
+            )
         if encoded.decode("utf-8") != text:
             problems.append("entry fails a UTF-8 encode/decode round-trip")
     return problems
